@@ -1,0 +1,40 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/newbeedaly/spring-cloud-netflix-example.git
+          username: 'xxx'
+          password: 'xxx'
+          search-paths: spring-cloud-config-repo/common,spring-cloud-config-repo/server* #common的子目录，以及server开头的子目录中，查找配置文件
+          default-label: master # 默认为main
+    # AMQPsu
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: 123456
+eureka:
+  client:
+    registerWithEureka: true # 是否需要被其他服务调用
+    fetchRegistry: true # 是否从eureka-server中，获取注册信息，集群时需要同步其他的eureka-server数据
+    service-url:
+      defaultZone: http://newbeedaly:123456@127.0.0.1:8761/eureka/
+  instance:
+    #ip-address: 127.0.0.1 # 将自己的IP注册到eureka
+    instance-id: config-server # 服务的名称
+    prefer-ip-address: true # 服务请求前缀使用ip
+# 暴露接口，用于AMQP post -> http://localhost:8888/actuator/bus-refresh,http://localhost:8888/actuator/busrefresh
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

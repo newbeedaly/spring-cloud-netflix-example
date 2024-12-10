@@ -1,0 +1,46 @@
+server:
+  port: 7000
+  servlet:
+    context-path: /
+spring:
+  profiles:
+    active: @profile@
+  application:
+    name: gateway
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      profile: @profile@
+    inetutils:
+      ignored-interfaces: 'VMware Virtual Ethernet Adapter for VMnet1,VMware Virtual Ethernet Adapter for VMnet8'
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: 123456
+eureka:
+  client:
+    registerWithEureka: true # 是否需要被其他服务调用
+    fetchRegistry: true # 是否从eureka-server中，获取注册信息，集群时需要同步其他的eureka-server数据
+    service-url:
+      defaultZone: http://newbeedaly:123456@127.0.0.1:8761/eureka/
+  instance:
+    #ip-address: 127.0.0.1 # 将自己的IP注册到eureka
+    instance-id: gateway # 服务的名称
+    prefer-ip-address: true # 服务请求前缀使用ip
+    metadata-map:
+      # 自定义元数据
+      mydata: local-newbeedaly
+# 暴露接口，用于AMQP
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+feign:
+  hystrix:
+    enabled: true

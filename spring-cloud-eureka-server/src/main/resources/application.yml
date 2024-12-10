@@ -1,0 +1,34 @@
+server:
+  port: 8761
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: eureka
+  security:
+    user:
+      name: newbeedaly
+      password: 123456
+eureka:
+  client:
+    registerWithEureka: false # server作为服务提供者，不需要被其他服务调用
+    fetchRegistry: false # 是否从eureka-server中，获取注册信息，集群时需要同步其他的eureka-server数据
+    serviceUrl:
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@127.0.0.1:${server.port}/eureka/
+    healthcheck:
+      enabled: true # 应用程序将自己的健康状态传播到eureka-server服务
+  instance:
+    instance-id: eureka
+    hostname: eureka
+    metadata-map:
+      author: newbeedaly # 自定义元数据
+    status-page-url-path: http://127.0.0.1:8761 # 修改默认跳转地址
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 默认是禁用，通过配置启用
+        # http://127.0.0.1:8888/actuator/health
+  endpoint:
+    health:
+      show-details: always # 显示详细信息，默认不显示

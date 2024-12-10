@@ -1,0 +1,34 @@
+server:
+  port: 10001
+  servlet:
+    context-path: /
+spring:
+  profiles:
+    active: @profile@
+  application:
+    name: user
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      profile: @profile@
+      name: user
+eureka:
+  client:
+    registerWithEureka: true # 是否需要被其他服务调用
+    fetchRegistry: true # 是否从eureka-server中，获取注册信息，集群时需要同步其他的eureka-server数据
+    service-url:
+      defaultZone: http://newbeedaly:123456@127.0.0.1:8761/eureka/
+  instance:
+    #ip-address: 127.0.0.1 # 将自己的IP注册到eureka
+    instance-id: user # 服务的名称
+    prefer-ip-address: true # 服务请求前缀使用ip
+    metadata-map:
+      # 自定义元数据
+      mydata: local-user
+logging:
+  level:
+    root: info
